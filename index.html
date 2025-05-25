@@ -3,101 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aprende+</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Test de Nivelación</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        function calcularNivel() {
+            let score = 0;
+            // Respuestas correctas
+            if (document.getElementById('q1_a2').checked) score++;
+            if (document.getElementById('q2_a1').checked) score++;
+            if (document.getElementById('q3_a2').checked) score++;
+            if (document.getElementById('q4_a1').checked) score++;
+
+            let resultado = "Nivel de inglés: ";
+            if (score <= 1) {
+                resultado += "Principiante";
+            } else if (score == 2 || score == 3) {
+                resultado += "Intermedio";
+            } else {
+                resultado += "Avanzado";
+            }
+            alert(resultado);
+        }
+    </script>
 </head>
 <body>
-    <header>
-        <h1>Bienvenido a Aprende+</h1>
-        <nav>
-            <ul>
-                <li><a href="#inicio">Inicio</a></li>
-                <li><a href="#cursos">Cursos y Lecciones</a></li>
-                <li><a href="#contacto">Contacto</a></li>
-            </ul>
-        </nav>
-    </header>
 
-    <div class="contenedor01">
-        <h2>Educar es crecer</h2>
-        <h2>Aprender es avanzar.</h2>
-        <h2>Triunfa, Crece, Alcanza tus metas.</h2>
-        <h2>El conocimiento es poder</h2>
+<!-- Header -->
+<header>
+    <div class="logo">
+        <h1>Academia de Idiomas</h1>
     </div>
-
-    <section id="inicio">
-        <h2>¡Hola! Soy Ángel Martínez</h2>
-        <p>Bienvenido a Aprende+. Aquí encontrarás recursos para aprender múltiples idiomas de manera interactiva.</p>
-    </section>
-    <section id="gif">
-        <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExbnljM2Frd3RodHJodm5udG9jeGE1OXpzdXNteXY2aWhkaWE0eXRoMCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/FnjMzd6IzcsabO2Kp7/giphy.gif
-        " alt="GIF de ejemplo" width="300">
-    </section>
-    
-
-    <section id="info">
-        <h2>Misión</h2>
-        <p>Brindar herramientas accesibles y efectivas para que adolescentes y personas de todas las edades aprendan nuevos idiomas de manera interactiva y dinámica.</p>
-
-        <h2>Visión</h2>
-        <p>Ser la plataforma líder en enseñanza de idiomas para adolescentes, proporcionando una experiencia de aprendizaje divertida, accesible y efectiva.</p>
-
-        <h2>Valores</h2>
+    <nav>
         <ul>
-            <li>Accesibilidad</li>
-            <li>Innovación</li>
-            <li>Compromiso con el aprendizaje</li>
-            <li>Inclusión</li>
-            <li>Calidad educativa</li>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="index.html#test">Test de Nivelación</a></li>
+            <li><a href="index.html#contacto">Contacto</a></li>
         </ul>
+    </nav>
+</header>
 
-        <h2>¿Qué ofrece Aprende+?</h2>
-        <ul>
-            <li>Lecciones interactivas en varios idiomas.</li>
-            <li>Ejercicios prácticos de gramática y vocabulario.</li>
-            <li>Pronunciación guiada por hablantes nativos.</li>
-            <li>Juegos educativos para un aprendizaje más divertido.</li>
-            <li>Seguimiento del progreso personal.</li>
-        </ul>
-    </section>
+<!-- Test de Nivelación -->
+<section id="test">
+    <h2>Test de Nivelación</h2>
+    <p>Responde las siguientes preguntas para determinar tu nivel de inglés.</p>
 
-    <section id="cursos">
-        <h2>Cursos y Lecciones</h2>
-        <p>Explora nuestros cursos diseñados para facilitar tu aprendizaje de idiomas.</p>
-        
-        <div class="curso">
-            <h3><a href="curso_ingles.html">Curso de Inglés</a></h3>
-            <p>Aprende inglés con nuestra metodología interactiva. Desde gramática básica hasta conversaciones avanzadas.</p>
-        </div>
-        
-        <div class="curso">
-            <h3><a href="test.html">Test de Nivelación de Inglés</a></h3>
-            <p>Realiza nuestro test de nivelación para conocer tu dominio del inglés y obtener recomendaciones personalizadas.</p>
-        </div>
-    </section>
-    
-    
-    <section id="contacto">
-        <h2>Contacto</h2>
-        <form id="contactForm">
-            <label for="nombre">Nombre:</label>
-            <input type="text" id="nombre" required>
-            
-            <label for="email">Correo Electrónico:</label>
-            <input type="email" id="email" required>
-            
-            <label for="mensaje">Mensaje:</label>
-            <textarea id="mensaje" required></textarea>
-            
-            <button type="submit">Enviar</button>
-        </form>
-        <p id="mensajeExito" class="hidden">¡Mensaje enviado con éxito!</p>
-    </section>
+    <form onsubmit="event.preventDefault(); calcularNivel();">
+        <h3>Pregunta 1:</h3>
+        <p>¿Cómo se dice "hola" en inglés?</p>
+        <label><input type="radio" name="q1" id="q1_a1"> Hi</label><br>
+        <label><input type="radio" name="q1" id="q1_a2"> Hello</label><br>
+        <label><input type="radio" name="q1" id="q1_a3"> Goodbye</label><br>
 
-    <footer>
-        <p>Contáctame: <a href="mailto:angelmillan@gmail.com">angelmillan@gmail.com</a></p>
-    </footer>
+        <h3>Pregunta 2:</h3>
+        <p>¿Cuál es la forma correcta de decir "yo tengo" en inglés?</p>
+        <label><input type="radio" name="q2" id="q2_a1"> I have</label><br>
+        <label><input type="radio" name="q2" id="q2_a2"> I haves</label><br>
+        <label><input type="radio" name="q2" id="q2_a3"> I having</label><br>
 
-    <script src="script.js"></script>
+        <h3>Pregunta 3:</h3>
+        <p>¿Cómo se dice "comer" en inglés?</p>
+        <label><input type="radio" name="q3" id="q3_a1"> Work</label><br>
+        <label><input type="radio" name="q3" id="q3_a2"> Eat</label><br>
+        <label><input type="radio" name="q3" id="q3_a3"> Drink</label><br>
+
+        <h3>Pregunta 4:</h3>
+        <p>¿Cómo se dice "mañana" en inglés?</p>
+        <label><input type="radio" name="q4" id="q4_a1"> Tomorrow</label><br>
+        <label><input type="radio" name="q4" id="q4_a2"> Yesterday</label><br>
+        <label><input type="radio" name="q4" id="q4_a3"> Today</label><br>
+        <section id="videos">
+            <h2>Test de ingles</h2>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/_mS60CJt6hc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </section>
+        <button type="submit">Calcular Nivel</button>
+    </form>
+</section>
+
+<!-- Footer -->
+<footer>
+    <p>&copy; 2025 Academia de Idiomas. Todos los derechos reservados.</p>
+</footer>
+
 </body>
 </html>
