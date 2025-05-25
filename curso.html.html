@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curso</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Header -->
+<header>
+    <div class="logo">
+        <h1>Academia de Idiomas</h1>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="index.html#test">Test de Nivelación</a></li>
+        </ul>
+    </nav>
+</header>
+
+<!-- Curso de Inglés -->
+<section id="curso">
+    <h2>Curso de Inglés</h2>
+    <p>Aprende inglés con nuestra curso, cubriremos gramática, pronunciación y vocabulario.</p>
+
+    <section id="videos">
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/Bv6gs2pChzk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </section>
+    <h3>Formulario de Inscripción</h3>
+    <form action="inscripcion.php" method="POST">
+        <label for="nombre">Nombre completo:</label>
+        <input type="text" name="nombre" id="nombre" required>
+
+        <label for="email">Correo electrónico:</label>
+        <input type="email" name="email" id="email" required>
+
+        <label for="nivel">Nivel actual:</label>
+        <select name="nivel" id="nivel" required>
+            <option value="principiante">Principiante</option>
+            <option value="intermedio">Intermedio</option>
+            <option value="avanzado">Avanzado</option>
+        </select>
+
+        <button type="submit">Inscribirse</button>
+    </form>
+</section>
+
+<!-- Footer -->
+<footer>
+    <p>&copy; 2025 Academia de Idiomas. Todos los derechos reservados.</p>
+</footer>
+
+</body>
+</html>
