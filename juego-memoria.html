@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Juego de Memoria - Aprende+</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        #memoria-container {
+            max-width: 700px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            margin-bottom: 10px;
+        }
+        #tablero {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .tarjeta {
+            background-color: #4caf50;
+            color: white;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            user-select: none;
+            position: relative;
+            perspective: 1000px;
+        }
+        .tarjeta-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .tarjeta.flipped .tarjeta-inner {
+            transform: rotateY(180deg);
+        }
+        .tarjeta-front, .tarjeta-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .tarjeta-front {
+            background-color: #4caf50;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        .tarjeta-back {
+            background-color: #f0f0f0;
+            color: #333;
+            transform: rotateY(180deg);
+            font-weight: normal;
+            font-size: 16px;
+        }
+        #mensaje {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #333;
+            min-height: 24px;
+        }
+        #reiniciar {
+            margin-top: 25px;
+            padding: 10px 25px;
+            font-size: 16px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #reiniciar:hover {
+            background-color: #388e3c;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0 0 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        nav ul li a {
+            text-decoration: none;
+            color: #4caf50;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Juego de Memoria de Vocabulario</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="juegos.html">Juegos</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div id="memoria-container">
+        <p>Haz clic en las tarjetas para emparejar la palabra en inglés con su traducción al español.</p>
+        <div id="tablero"></div>
+        <div id="mensaje"></div>
+        <button id="reiniciar">Reiniciar Juego</button>
+    </div>
+
+    <script>
+        const parejas = [
+            { ingles: "Dog", espanol: "Perro" },
+            { ingles: "Cat", espanol: "Gato" },
+            { ingles: "House", espanol: "Casa" },
+            { ingles: "Book", espanol: "Libro" },
+            { ingles: "Sun", espanol: "Sol" },
+            { ingles: "Water", espanol: "Agua" },
+            { ingles: "Food", espanol: "Comida" },
+            { ingles: "Car", espanol: "Coche" }
+        ];
+
+        let tablero = document.getElementById("tablero");
+        let mensaje = document.getElementById("mensaje");
+        let reiniciarBtn = document.getElementById("reiniciar");
+
+        let cartas = [];
+        let cartasVolteadas = [];
+        let parejasEncontradas = 0;
+        let bloqueado = false;
+
+        function mezclarArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                let j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function crearTablero() {
+            cartas = [];
+            parejasEncontradas = 0;
+            bloqueado = false;
+            mensaje.textContent = "";
+
+            // Creamos pares de tarjetas: cada pareja dos tarjetas (inglés y español)
+            parejas.forEach(pareja => {
+                cartas.push({ id: Math.random(), texto: pareja.ingles, tipo: "ingles" });
+                cartas.push({ id: Math.random(), texto: pareja.espanol, tipo: "espanol" });
+            });
+
+            mezclarArray(cartas);
+            tablero.innerHTML = "";
+
+            cartas.forEach((carta, index) => {
+                const tarjeta = document.createElement("div");
+                tarjeta.classList.add("tarjeta");
+                tarjeta.dataset.index = index;
+
+                tarjeta.innerHTML = `
+                    <div class="tarjeta-inner">
+                        <div class="tarjeta-front">?</div>
+                        <div class="tarjeta-back">${carta.texto}</div>
+                    </div>
+                `;
+
+                tarjeta.addEventListener("click", () => voltearTarjeta(tarjeta, carta));
+                tablero.appendChild(tarjeta);
+            });
+        }
+
+        function voltearTarjeta(tarjeta, carta) {
+            if (bloqueado) return;
+            if (cartasVolteadas.includes(tarjeta)) return;
+
+            tarjeta.classList.add("flipped");
+            cartasVolteadas.push({ tarjeta, carta });
+
+            if (cartasVolteadas.length === 2) {
+                bloquearTablero();
+                setTimeout(comprobarPareja, 1000);
+            }
+        }
+
+        function bloquearTablero() {
+            bloqueado = true;
+        }
+
+        function desbloquearTablero() {
+            bloqueado = false;
+        }
+
+        function comprobarPareja() {
+            const [primero, segundo] = cartasVolteadas;
+            const esPareja = (
+                (primero.carta.tipo !== segundo.carta.tipo) &&
+                ( (primero.carta.texto === segundo.carta.texto) || 
+                  (parejas.some(p => (p.ingles === primero.carta.texto && p.espanol === segundo.carta.texto) ||
+                                     (p.espanol === primero.carta.texto && p.ingles === segundo.carta.texto))) )
+            );
+
+            if (esPareja) {
+                parejasEncontradas++;
+                mensaje.textContent = "¡Correcto! Has encontrado una pareja.";
+                // Desactivar las tarjetas para que no puedan volver a clicarse
+                primero.tarjeta.removeEventListener("click", () => voltearTarjeta(primero.tarjeta, primero.carta));
+                segundo.tarjeta.removeEventListener("click", () => voltearTarjeta(segundo.tarjeta, segundo.carta));
+            } else {
+                mensaje.textContent = "No son pareja, intenta de nuevo.";
+                // Voltear las cartas para esconderlas
+                primero.tarjeta.classList.remove("flipped");
+                segundo.tarjeta.classList.remove("flipped");
+            }
+
+            cartasVolteadas = [];
+            desbloquearTablero();
+
+            if (parejasEncontradas === parejas.length) {
+                mensaje.textContent = "¡Felicidades! Has encontrado todas las parejas.";
+            }
+        }
+
+        reiniciarBtn.addEventListener("click", crearTablero);
+
+        crearTablero();
+    </script>
+</body>
+</html>

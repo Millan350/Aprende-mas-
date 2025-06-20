@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quiz de Inglés - Aprende+</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      margin: 0; padding: 0;
+      display: flex; justify-content: center; align-items: center; height: 100vh;
+    }
+    #quiz-container {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .option {
+      background: #f0f0f0;
+      margin: 10px 0;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+    .option:hover {
+      background-color: #d0e8d0;
+    }
+    .correct {
+      background-color: #a5d6a7 !important;
+    }
+    .incorrect {
+      background-color: #ef9a9a !important;
+    }
+    #siguiente {
+      margin-top: 20px;
+      padding: 10px 20px;
+      border: none;
+      background-color: #4caf50;
+      color: white;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="quiz-container">
+    <h2 id="pregunta">Pregunta aquí</h2>
+    <div id="opciones"></div>
+    <p id="resultado"></p>
+    <button id="siguiente">Siguiente</button>
+  </div>
+
+  <script>
+    const preguntas = [
+      { pregunta: "¿Cómo se dice 'perro' en inglés?", opciones: ["Cat", "Dog", "Bird", "Fish"], respuesta: "Dog" },
+      { pregunta: "¿Cuál es el pasado de 'eat'?", opciones: ["Ate", "Eated", "Eating", "Eats"], respuesta: "Ate" },
+      { pregunta: "¿Qué significa 'beautiful'?", opciones: ["Bonito", "Rápido", "Feliz", "Alto"], respuesta: "Bonito" },
+      { pregunta: "¿Cómo se dice 'libro' en inglés?", opciones: ["Book", "Table", "Chair", "Pen"], respuesta: "Book" },
+      { pregunta: "¿Cuál es el plural de 'child'?", opciones: ["Childs", "Childes", "Children", "Childer"], respuesta: "Children" },
+      { pregunta: "¿Qué significa 'quickly'?", opciones: ["Lentamente", "Rápidamente", "Suavemente", "Altamente"], respuesta: "Rápidamente" },
+      { pregunta: "¿Cómo se dice 'escuela' en inglés?", opciones: ["School", "Classroom", "Teacher", "Lesson"], respuesta: "School" }
+    ];
+
+    let indice = 0;
+
+    function mostrarPregunta() {
+      document.getElementById("resultado").textContent = "";
+      document.getElementById("siguiente").style.display = "none";
+      const actual = preguntas[indice];
+      document.getElementById("pregunta").textContent = actual.pregunta;
+
+      const contenedorOpciones = document.getElementById("opciones");
+      contenedorOpciones.innerHTML = "";
+
+      actual.opciones.forEach(opcion => {
+        const div = document.createElement("div");
+        div.classList.add("option");
+        div.textContent = opcion;
+        div.onclick = () => verificarRespuesta(div, opcion);
+        contenedorOpciones.appendChild(div);
+      });
+    }
+
+    function verificarRespuesta(elemento, seleccion) {
+      const actual = preguntas[indice];
+      const opciones = document.querySelectorAll('.option');
+      opciones.forEach(opt => opt.onclick = null); // desactivar más clicks
+
+      if (seleccion === actual.respuesta) {
+        elemento.classList.add("correct");
+        document.getElementById("resultado").textContent = "¡Correcto!";
+      } else {
+        elemento.classList.add("incorrect");
+        document.getElementById("resultado").textContent = "Incorrecto. La respuesta correcta era: " + actual.respuesta;
+      }
+      document.getElementById("siguiente").style.display = "inline-block";
+    }
+
+    document.getElementById("siguiente").onclick = () => {
+      indice++;
+      if (indice < preguntas.length) {
+        mostrarPregunta();
+      } else {
+        document.getElementById("quiz-container").innerHTML = `
+          <h2>¡Has terminado el quiz!</h2>
+          <p>Muy bien hecho.</p>
+          <a href="juegos.html">Volver a Juegos</a>
+        `;
+      }
+    };
+
+    mostrarPregunta();
+  </script>
+
+</body>
+</html>

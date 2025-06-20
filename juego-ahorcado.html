@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ahorcado - Aprende+</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        #ahorcado-container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        #palabra {
+            font-size: 2em;
+            letter-spacing: 10px;
+            margin-bottom: 20px;
+        }
+        #letras {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .letra-btn {
+            padding: 10px 15px;
+            font-size: 1em;
+            border: none;
+            border-radius: 8px;
+            background-color: #f0f0f0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .letra-btn:hover {
+            background-color: #d0e8d0;
+        }
+        .letra-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Juego del Ahorcado</h1>
+    <nav>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="juegos.html">Juegos</a></li>
+        </ul>
+    </nav>
+</header>
+
+<div id="ahorcado-container">
+    <h2>Adivina la palabra en inglés</h2>
+    <div id="palabra">_ _ _ _ _</div>
+    <p>Errores restantes: <span id="intentos">6</span></p>
+    <div id="letras"></div>
+    <p id="resultado"></p>
+</div>
+
+<script>
+    const palabras = ["school", "teacher", "student", "language", "lesson", "vocabulary", "dictionary", "university"];
+    let palabraSecreta = "";
+    let palabraMostrada = [];
+    let intentos = 6;
+
+    function iniciarJuego() {
+        palabraSecreta = palabras[Math.floor(Math.random() * palabras.length)];
+        palabraMostrada = Array(palabraSecreta.length).fill("_");
+        intentos = 6;
+        document.getElementById("palabra").textContent = palabraMostrada.join(" ");
+        document.getElementById("intentos").textContent = intentos;
+        document.getElementById("resultado").textContent = "";
+        generarBotones();
+    }
+
+    function generarBotones() {
+        const abecedario = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const contenedor = document.getElementById("letras");
+        contenedor.innerHTML = "";
+
+        for (let letra of abecedario) {
+            const btn = document.createElement("button");
+            btn.textContent = letra;
+            btn.classList.add("letra-btn");
+            btn.onclick = () => verificarLetra(letra, btn);
+            contenedor.appendChild(btn);
+        }
+    }
+
+    function verificarLetra(letra, boton) {
+        boton.disabled = true;
+        let acertado = false;
+
+        for (let i = 0; i < palabraSecreta.length; i++) {
+            if (palabraSecreta[i].toUpperCase() === letra) {
+                palabraMostrada[i] = palabraSecreta[i];
+                acertado = true;
+            }
+        }
+
+        document.getElementById("palabra").textContent = palabraMostrada.join(" ");
+
+        if (!acertado) {
+            intentos--;
+            document.getElementById("intentos").textContent = intentos;
+        }
+
+        verificarFin();
+    }
+
+    function verificarFin() {
+        if (!palabraMostrada.includes("_")) {
+            document.getElementById("resultado").textContent = "¡Felicidades! Has adivinado la palabra.";
+            desactivarTodo();
+        } else if (intentos === 0) {
+            document.getElementById("resultado").textContent = "Has perdido. La palabra era: " + palabraSecreta;
+            desactivarTodo();
+        }
+    }
+
+    function desactivarTodo() {
+        const botones = document.querySelectorAll(".letra-btn");
+        botones.forEach(btn => btn.disabled = true);
+    }
+
+    iniciarJuego();
+</script>
+
+</body>
+</html>
